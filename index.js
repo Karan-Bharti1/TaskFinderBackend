@@ -15,6 +15,7 @@ initialiseDatabase()
 const JWT_SECRET="your_jwt_secret"
 const User=require("./models/Owner.models")
 const Tags=require("./models/Tag.models")
+const Project=require("./models/Project.models")
 //Middleware to verify token
 const verifyJWT=(req,res,next)=>{
     const token=req.headers['authorization']
@@ -100,6 +101,31 @@ app.get("/tags/auth",verifyJWT,async(req,res)=>{
         }
     } catch (error) {
        res.status(500).json({message:"Failed to fetch tags data"}) 
+    }
+})
+app.post("/projects/auth",verifyJWT,async(req,res)=>{
+    const data =req.body
+    try {
+     const project=new Project(data)   
+     const savedProject=await project.save()
+     if(savedProject){
+        res.status(200).json({message:"Project updated successfully",project:savedProject})
+     }
+    } catch (error) {
+        console.log(error)
+    res.status(500).json({message:"failed to add project"})  
+    }
+})
+app.get("/projects/auth",async(req,res)=>{
+    try {
+       const projects=await Project.find() 
+       if(projects){
+        res.status(200).json(projects)
+    }else{
+        res.status(400).json({message:"No Projects found"})   
+    }
+    } catch (error) {
+        res.status(500).json({message:"Failed to fetch Projects data"}) 
     }
 })
 app.listen(PORT,()=>{

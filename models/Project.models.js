@@ -5,5 +5,5 @@ const projectSchema = new mongoose.Schema({
     description: { type: String }, // Optional field for project details
     createdAt: { type: Date, default: Date.now }
    });
-   module.exports = mongoose.model('Project', projectSchema);
+   module.exports = mongoose.model('ProjectTasks', projectSchema);
    
