@@ -165,6 +165,32 @@ app.post("/tasks/auth",verifyJWT,async(req,res)=>{
         res.status(500).json({ message: "Failed to create task", error });
     }
 })
+app.get("/tasks/auth",verifyJWT,async(req,res)=>{
+    try {
+        const filter = {};
+
+        if (req.query.team) filter.team = req.query.team;
+
+        if (req.query.owner) {
+            // Assuming owners are ObjectIds, convert the string to an array of ObjectIds
+            const ownerIds = req.query.owner.map(id => mongoose.Types.ObjectId(id));
+            filter.owners = { $in: ownerIds };
+        }
+
+        if (req.query.tags) {
+            // Tags can be split and passed as a };
+        }
+
+        if (req.query.project) filter.project = req.query.project;
+        if (req.query.status) filter.status = req.query.status;
+
+        const tasks = await Task.find(filter).populate("team owners");
+        res.status(200).json(tasks);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch tasks", error });
+    }
+})
 app.listen(PORT,()=>{
   console.log( `App is running at ${PORT}`)
 })
