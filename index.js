@@ -207,10 +207,26 @@ res.status(400).json({message:"Task does not exists"})
         console.log()
     }
 })
+app.get("/report/lastweek",verifyJWT,async(req,res)=>{
+    const  currentDate=new Date()
+    currentDate.setHours(23,59,59,999)
+    const lastDate=new Date()
+    lastDate.setDate(currentDate.getDate()-7)
+    lastDate.setHours(0,0,0,0)
+    try {
+       const tasks =await Task.find({
+        status:"Completed",
+        updatedAt:{ $gte :lastDate,$lte: currentDate}
+       }) 
+       if(tasks.length>0){
+        res.status(200).json(tasks)
+       }else{
+        return res.status(404).json({ error: "No tasks completed in the last 7 days." });
+       }
+    } catch (error) {
+        return  res.status(500).json({ error: "Failed to fetch completed tasks in last 7 days." });
+    }
+})
 app.listen(PORT,()=>{
   console.log( `App is running at ${PORT}`)
 })
-//67eb96a17dcf2f7613e8c90f Project
-//67eb9167aea5f5abbdb85c82,67eb9144aea5f5abbdb85c7c Tags
-//67eba1125d35d18a08d50bc5 Teams
-//67eb70861a087e13f6e092df User
