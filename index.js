@@ -61,8 +61,18 @@ res.json({message:"Invalid Secret"})
     }
 
 })
-app.get("/task/api/data",verifyJWT,async(req,res)=>{
-res.json({message:"Protected route accessible"})
+app.get("/get/auth/me",verifyJWT,async(req,res)=>{
+const {email}=req.body;
+try {
+    const userData=await User.findOne({email:email})
+    if(userData){
+        res.status(200).json({message:"User Details Fetched Successfully",userData})
+    }else{
+        res.status(400).json({message:"No User Found"})
+    }
+} catch (error) {
+  res.status(500).json({message:"Failed to fetch user data"})  
+}
 })
 app.listen(PORT,()=>{
   console.log( `App is running at ${PORT}`)
