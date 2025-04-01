@@ -207,6 +207,18 @@ res.status(400).json({message:"Task does not exists"})
         console.log()
     }
 })
+app.put("/tasks/auth/:id",verifyJWT,async(req,res)=>{
+    try {
+        const updatedData=await Task.findByIdAndUpdate(req.params.id,req.body,{new:true})
+        if(updatedData){
+            res.status(200).json({message:"Data Updated Successfully",task:updatedData})
+        }else{
+            res.status(400).json({message:"Task not found"})
+        }
+    } catch (error) {
+        res.status(500).json({message:"Failed to update task data"})
+    }
+})
 app.get("/report/lastweek",verifyJWT,async(req,res)=>{
     const  currentDate=new Date()
     currentDate.setHours(23,59,59,999)
