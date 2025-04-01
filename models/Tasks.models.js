@@ -3,13 +3,13 @@
 const mongoose=require('mongoose')
 const taskSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required: true }, 
-    team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team',
+    project: { type: mongoose.Schema.Types.ObjectId, ref: 'ProjectTasks', required: true }, 
+    team: { type: mongoose.Schema.Types.ObjectId, ref: 'TeamTasks',
    required: true }, // Refers to Team model
     owners: [
     { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } // Refers to User model (owners)
     ],
-    tags: [{ type: String }], // Array of tags
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref:"TagsTask"}], // Array of tags
     timeToComplete: { type: Number, required: true }, // Number of days to complete the task
     status: {
     type: String,

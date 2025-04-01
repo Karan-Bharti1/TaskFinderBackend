@@ -172,13 +172,14 @@ app.get("/tasks/auth",verifyJWT,async(req,res)=>{
         if (req.query.team) filter.team = req.query.team;
 
         if (req.query.owner) {
-            // Assuming owners are ObjectIds, convert the string to an array of ObjectIds
-            const ownerIds = req.query.owner.map(id => mongoose.Types.ObjectId(id));
+
+            const ownerIds = req.query.owner.split(",").map(id => mongoose.Types.ObjectId(id));
             filter.owners = { $in: ownerIds };
         }
 
         if (req.query.tags) {
-            // Tags can be split and passed as a };
+        
+            filter.tags = { $in: req.query.tags.split(",") };
         }
 
         if (req.query.project) filter.project = req.query.project;
@@ -189,6 +190,21 @@ app.get("/tasks/auth",verifyJWT,async(req,res)=>{
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to fetch tasks", error });
+    }
+})
+app.delete("/tasks/auth/:id",verifyJWT,async(req,res)=>{
+ 
+    try {
+        const deletedData=await Task.findByIdAndDelete(req.params.id) 
+        if(deletedData){
+            res.status(200).json({message:"Task deleted successfully",deletedData})
+        }else{
+res.status(400).json({message:"Task does not exists"})
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: "Failed to delete tasks", error });
+        console.log()
     }
 })
 app.listen(PORT,()=>{
