@@ -173,7 +173,7 @@ app.get("/tasks/auth",verifyJWT,async(req,res)=>{
 
         if (req.query.owner) {
 
-            const ownerIds = req.query.owner.split(",").map(id => mongoose.Types.ObjectId(id));
+            const ownerIds = req.query.owner.split(",");
             filter.owners = { $in: ownerIds };
         }
 
@@ -237,6 +237,29 @@ app.get("/report/lastweek",verifyJWT,async(req,res)=>{
        }
     } catch (error) {
         return  res.status(500).json({ error: "Failed to fetch completed tasks in last 7 days." });
+    }
+})
+app.get("/report/closed-tasks",async (req,res) => {
+    const filter={status:"Completed"}
+    
+    if (req.query.team) filter.team = req.query.team;
+
+    if (req.query.owner) {
+
+        const ownerIds = req.query.owner.split(",");
+        filter.owners = { $in: ownerIds };
+    }
+    if (req.query.project) filter.project = req.query.project;
+   
+    try {
+        const closedTasks=await Task.find(filter)
+        if(closedTasks){
+            res.status(200).json({closedTasks})
+        } else{
+            res.status(400).json({message:"No Data Found"})
+        }
+    } catch (error) {
+        res.status(500).json({message:"Failed to fetch Tasks Data"})
     }
 })
 app.listen(PORT,()=>{
