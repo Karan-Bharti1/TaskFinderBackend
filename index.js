@@ -239,7 +239,7 @@ app.get("/report/lastweek",verifyJWT,async(req,res)=>{
         return  res.status(500).json({ error: "Failed to fetch completed tasks in last 7 days." });
     }
 })
-app.get("/report/closed-tasks",async (req,res) => {
+app.get("/report/closed-tasks",verifyJWT,async (req,res) => {
     const filter={status:"Completed"}
     
     if (req.query.team) filter.team = req.query.team;
@@ -261,6 +261,15 @@ app.get("/report/closed-tasks",async (req,res) => {
     } catch (error) {
         res.status(500).json({message:"Failed to fetch Tasks Data"})
     }
+})
+app.get("/report/pending",verifyJWT,async(req,res)=>{
+try {
+    const pendingTasks = await Task.find({ status: { $ne: "Completed" } });
+    const totalDays=pendingTasks.reduce((acc,curr)=>acc+curr.timeToComplete,0)
+    res.status(200).json({ totalDays });
+} catch (error) {
+    res.status(500).json({ message: "Failed to fetch pending work report", error });   
+}
 })
 app.listen(PORT,()=>{
   console.log( `App is running at ${PORT}`)
