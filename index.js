@@ -1,6 +1,6 @@
 const {initialiseDatabase}=require("./databse/database.connection")
 const cors=require("cors")
-const PORT=3000
+const PORT=5000
 const jwt=require("jsonwebtoken")
 const express=require('express')
 const app=express()
@@ -12,6 +12,9 @@ const corsOptions={
 }
 app.use(cors(corsOptions))
 initialiseDatabase()
+const JWT_SECRET="your_jwt_secret"
+const User=require("./models/Owner.models")
+const Tags=require("./models/Tag.models")
 //Middleware to verify token
 const verifyJWT=(req,res,next)=>{
     const token=req.headers['authorization']
@@ -28,8 +31,7 @@ const verifyJWT=(req,res,next)=>{
         
     }
 }
-const JWT_SECRET="your_jwt_secret"
-const User=require("./models/Owner.models")
+
 const ownerSignUp = async (data) => {
     try {
        
@@ -73,6 +75,32 @@ try {
 } catch (error) {
   res.status(500).json({message:"Failed to fetch user data"})  
 }
+})
+app.post("/tags/auth",verifyJWT,async(req,res)=>{
+    
+    try {
+        const newTag= new Tags(req.body)
+        const saveTag=await newTag.save()
+        if(saveTag){
+            res.status(200).json({message:"Tag updated successfully",tag:saveTag})
+        }
+    } catch (error) {
+       res.status(500).json({message:"Failed to create new tag"}) 
+       console.log(error)
+    }
+})
+app.get("/tags/auth",verifyJWT,async(req,res)=>{
+    
+    try {
+        const tagdData= await Tags.find()
+        if(tagdData && tagdData.length>0){
+            res.status(200).json(tagdData)
+        }else{
+            res.status(400).json({message:"No tags found"})   
+        }
+    } catch (error) {
+       res.status(500).json({message:"Failed to fetch tags data"}) 
+    }
 })
 app.listen(PORT,()=>{
   console.log( `App is running at ${PORT}`)
