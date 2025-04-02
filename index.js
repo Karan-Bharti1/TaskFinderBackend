@@ -6,10 +6,12 @@ const express=require('express')
 const app=express()
 app.use(express.json())
 const corsOptions={
-    origin:"*",
-    credentials:true,
-    optionsSuccessStatus:200
-}
+        origin: true, // Allow any origin
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: true,
+        preflightContinue: false,
+    
+    }
 app.use(cors(corsOptions))
 initialiseDatabase()
 const JWT_SECRET="your_jwt_secret"
