@@ -63,7 +63,8 @@ app.get("/users/existing",async(req,res)=>{
     try {
         const existingUser = await User.findOne({ email });
        if(existingUser){
-        res.json({ message:"user already exists",existingUser })};
+        res.status(200).json({ message:"user already exists",existingUser })}
+       
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
