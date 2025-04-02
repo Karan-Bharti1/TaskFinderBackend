@@ -55,16 +55,17 @@ try {
     res.status(500).json({message:"Failed To add user to database"})
 }
 })
-app.get("/users/existing",async(req,res)=>{
+app.get("/users",async(req,res)=>{
 
-    const { email } = req.query;
-    if (!email) return res.status(400).json({ message: "Email is required" });
     
     try {
-        const existingUser = await User.findOne({ email });
-       if(existingUser){
-        res.status(200).json({ message:"user already exists",existingUser })}
-       
+        const existingUsers = await User.find();
+       if(existingUsers){
+        const emailIds=existingUsers.map(user=>user.email)
+        res.status(200).json({emailIds })}
+       else{
+        res.status(404).json({message:"Users not found"})
+       }
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
