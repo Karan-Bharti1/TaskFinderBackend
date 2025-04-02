@@ -55,6 +55,18 @@ try {
     res.status(500).json({message:"Failed To add user to database"})
 }
 })
+app.get("/users/existing",async(req,res)=>{
+
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+    
+    try {
+        const existingUser = await User.findOne({ email });
+        res.json({ message:"user already exists",existingUser });
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+})
 app.post("/login",async(req,res)=>{
     const user=req.body
     const Secret_Key=await User.findOne(user)
@@ -118,6 +130,7 @@ app.post("/projects/auth",verifyJWT,async(req,res)=>{
     res.status(500).json({message:"failed to add project"})  
     }
 })
+
 app.get("/projects/auth",async(req,res)=>{
     try {
        const projects=await Project.find() 
