@@ -6,7 +6,7 @@ const express=require('express')
 const app=express()
 app.use(express.json())
 const corsOptions={
-        origin: true, // Allow any origin
+        origin: ['http://localhost:5173/','*'], // Allow any origin
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
         preflightContinue: false,
