@@ -161,6 +161,18 @@ app.post("/teams/auth",verifyJWT,async(req,res)=>{
     res.status(500).json({message:"failed to add team data"})  
     }
 })
+app.get("tasks/projects/auth:id",verifyJWT,async(req,res)=>{
+    const projects=await Task.find({project:req.params.id})
+   try {
+    if(projects){
+        res.status(200).json(projects)
+    }else{
+        res.status(404).json({message: "Projects not found"})
+    }
+   } catch (error) {
+    res.status(500).json({message:"Failed to fetch projects data"})
+   }
+})
 app.get("/teams/auth",async(req,res)=>{
     try {
        const teams=await Team.find() 
