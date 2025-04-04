@@ -9,7 +9,7 @@ const corsOptions={
         origin:'*', // Allow any origin
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
-        
+        optionSuccessStatus:200
     
     }
 app.use(cors(corsOptions))
