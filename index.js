@@ -6,7 +6,7 @@ const express=require('express')
 const app=express()
 app.use(express.json())
 const corsOptions={
-        origin:'*', // Allow any origin
+        origin:'http://localhost:5173/',
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
         optionSuccessStatus:200
@@ -173,7 +173,7 @@ app.get("/tasks/projects/auth/:id",verifyJWT,async(req,res)=>{
     res.status(500).json({message:"Failed to fetch projects data"})
    }
 })
-app.get("/teams/auth",async(req,res)=>{
+app.get("/teams/auth",async(req,res)=>{d
     try {
        const teams=await Team.find() 
        if(teams){
