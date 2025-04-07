@@ -60,8 +60,7 @@ try {
 }
 })
 app.get("/users",async(req,res)=>{
-
-    
+  
     try {
         const existingUsers = await User.find();
        if(existingUsers){
@@ -175,7 +174,7 @@ app.get("/tasks/projects/auth/:id",verifyJWT,async(req,res)=>{
     res.status(500).json({message:"Failed to fetch projects data"})
    }
 })
-app.get("/teams/auth",async(req,res)=>{d
+app.get("/teams/auth",async(req,res)=>{
     try {
        const teams=await Team.find() 
        if(teams){
