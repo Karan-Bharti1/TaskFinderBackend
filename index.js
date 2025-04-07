@@ -6,11 +6,10 @@ const express=require('express')
 const app=express()
 app.use(express.json())
 const corsOptions={
-        origin:'*',
+        origin:true,
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         credentials: true,
         optionSuccessStatus:200
-    
     }
 app.use(cors(corsOptions))
 initialiseDatabase()
