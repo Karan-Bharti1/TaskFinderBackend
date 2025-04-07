@@ -6,7 +6,7 @@ const express=require('express')
 const app=express()
 app.use(express.json())
 const corsOptions = {
-    origin: "http://localhost:5173/",  // Allows any domain
+    origin: ["http://localhost:5173/"],  // Allows any domain
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
     optionsSuccessStatus: 200  // Fixed the typo
