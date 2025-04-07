@@ -5,12 +5,12 @@ const jwt=require("jsonwebtoken")
 const express=require('express')
 const app=express()
 app.use(express.json())
-const corsOptions={
-        origin:true,
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-        credentials: true,
-        optionSuccessStatus:200
-    }
+const corsOptions = {
+    origin: "*",  // Allows any domain
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 200  // Fixed the typo
+}
 app.use(cors(corsOptions))
 initialiseDatabase()
 const JWT_SECRET="your_jwt_secret"
