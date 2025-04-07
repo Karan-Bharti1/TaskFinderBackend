@@ -5,14 +5,16 @@ const jwt=require("jsonwebtoken")
 const express=require('express')
 const app=express()
 app.use(express.json())
-const corsOptions = {
+// const corsOptions = {
+//     origin: "http://localhost:5173/", 
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     credentials: true,
+//     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+//     optionsSuccessStatus: 200  
+// }
+app.use(cors({
     origin: "http://localhost:5173/", 
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    optionsSuccessStatus: 200  
-}
-app.use(cors(corsOptions))
+}))
 initialiseDatabase()
 const JWT_SECRET="your_jwt_secret"
 const User=require("./models/Owner.models")
